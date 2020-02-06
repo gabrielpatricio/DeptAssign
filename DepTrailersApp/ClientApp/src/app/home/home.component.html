@@ -1,0 +1,19 @@
+<h1>Home</h1>
+
+<p *ngIf="!(popularMovies$ | async)"><em>Loading...</em></p>
+<!--<p>
+  <a [routerLink]="['/add']" class="btn btn-primary float-right mb-3">New post</a>
+</p>
+-->
+<div class="row card-group" *ngIf="(popularMovies$ | async)?.length>0">
+  <div class="col-4" *ngFor="let movie of (popularMovies$ | async)">
+    <div class="card" style="width: 16rem;">
+      <img class="card-img-top" src="http://image.tmdb.org/t/p/w185/{{movie.Poster}}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">{{movie.Title}}</h5>
+        <h6 class="bold padding-bottom-7">{{movie.Rating}} <small>/ 10</small></h6>
+        <a [routerLink]="['/movie', movie.Id]">More Details</a>
+      </div>
+    </div>
+  </div>
+</div>

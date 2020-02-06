@@ -1,0 +1,17 @@
+<h1>Results</h1>
+
+<p *ngIf="!(results$ | async)"><em>Loading...</em></p>
+<!--<p>
+  <a [routerLink]="['/add']" class="btn btn-primary float-right mb-3">New post</a>
+</p>
+-->
+<div class="list-group"  *ngIf="(results$ | async)?.length>0">
+  
+    <a *ngFor="let movie of (results$ | async)" class="list-group-item list-group-item-action flex-column align-items-start">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">{{movie.Title}}</h5>
+      </div>
+      <img class="img-thumbnail float-right" src="http://image.tmdb.org/t/p/w92/{{movie.Poster}}" alt="Card image cap">
+    </a>
+
+</div>

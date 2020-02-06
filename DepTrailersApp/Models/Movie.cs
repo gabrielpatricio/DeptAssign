@@ -13,6 +13,8 @@ namespace DepTrailersApp.Models
         public float Popularity { get; set; }
         public float Rating { get; set; }
         public string Release { get; set; }
+        public string Overview { get; set; }
         public string Trailer { get; set; }
     }
+
 }

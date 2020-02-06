@@ -19,29 +19,55 @@ namespace DepTrailersApp.Controllers
     {
         private readonly string TMDB_API_KEY = "24ef18a9a2a6be1292a50289a8b49004";
         private readonly string TMDB_API_URL = "https://api.themoviedb.org/3/";
-        private readonly string YT_API_KEY = "AIzaSyDRQG6vA0maCr9G6Cfy0ABCc_e5cO51q5E";
+        private readonly string YT_API_KEY = "AIzaSyCi3fLy92sRIlSNoh3lteI0IALE0dqOG2k";
 
         private readonly HttpClient http = new HttpClient();
-        // GET: api/movies
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
-        // GET api/movies/{searchString}
-        [HttpGet("{searchString}")]
-        public async Task<ActionResult<Movie>> Get(string searchString)
+        // GET api/movies/find?q={query}
+        [HttpGet("find/")]
+        public async Task<ActionResult<Movie>> getSearchResults([FromQuery(Name = "q")]string query)
         {
-
-            Uri url = new Uri($"{TMDB_API_URL}search/movie?api_key={TMDB_API_KEY}&query={searchString}");
+            Uri url = new Uri($"{TMDB_API_URL}search/movie?api_key={TMDB_API_KEY}&query={query}");
 
             var responseString = await http.GetStringAsync(url);
             dynamic body = JsonConvert.DeserializeObject(responseString);
 
             var movieList = new List<Movie>();
             var searchResults = body["results"];
-            
+
+            foreach (var entry in searchResults)
+            {
+                // Use getters and setters
+
+                Movie movie = new Movie
+                {
+                    Id = entry.id,
+                    Title = entry.original_title,
+                    Poster = entry.poster_path,
+                    Popularity = entry.popularity,
+                    Rating = entry.vote_average,
+                    Release = entry.release_date
+                };
+
+                movieList.Add(movie);
+            }
+            var json = JsonConvert.SerializeObject(movieList);
+
+            return Ok(json);
+        }
+        // GET /api/movies/popular
+        [HttpGet("popular/")]
+        public async Task<ActionResult<Movie>> getPopularMovies()
+        {
+
+            Uri url = new Uri($"{TMDB_API_URL}movie/popular?api_key={TMDB_API_KEY}&language=en-US&page=1");
+
+            var responseString = await http.GetStringAsync(url);
+            dynamic body = JsonConvert.DeserializeObject(responseString);
+
+            var movieList = new List<Movie>();
+            var searchResults = body["results"];
+
             foreach (var entry in searchResults)
             {
                 Movie movie = new Movie
@@ -51,8 +77,7 @@ namespace DepTrailersApp.Controllers
                     Poster = entry.poster_path,
                     Popularity = entry.popularity,
                     Rating = entry.vote_average,
-                    Release = entry.release_date,
-                    Trailer = new MoviesController().getTrailer(entry.original_title, entry.release_date)
+                    Release = entry.release_date
                 };
 
                 movieList.Add(movie);
@@ -61,6 +86,32 @@ namespace DepTrailersApp.Controllers
 
             return Ok(json);
         }
+        // Get api/movies/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Movie>> getMovie(int id)
+        {
+
+            Uri url = new Uri($"{TMDB_API_URL}movie/{id}?api_key={TMDB_API_KEY}&language=en-US");
+
+            var responseString = await http.GetStringAsync(url);
+            dynamic body = JsonConvert.DeserializeObject(responseString);
+
+            Movie movie = new Movie
+            {
+                Id = body.id,
+                Title = body.original_title,
+                Poster = body.poster_path,
+                Popularity = body.popularity,
+                Rating = body.vote_average,
+                Release = body.release_date,
+                Trailer = new MoviesController().getTrailer(body.original_title, body.release_date)
+            };
+
+
+            var json = JsonConvert.SerializeObject(movie);
+            return Ok(json);
+        }
+
 
         private string getTrailer(dynamic original_title, dynamic release_date)
         {
@@ -68,13 +119,14 @@ namespace DepTrailersApp.Controllers
             var videoId = "";
             YouTubeService youtube = new YouTubeService(new BaseClientService.Initializer()
             {
-                ApiKey = YT_API_KEY
-
+                ApiKey = YT_API_KEY,
+                ApplicationName = "deptrailers"
             });
+
             SearchResource.ListRequest listRequest = youtube.Search.List("snippet");
             listRequest.Q = search;
             listRequest.Type = "video";
-            listRequest.MaxResults = 2;
+            listRequest.MaxResults = 1;
 
             SearchListResponse searchResponse = listRequest.Execute();
 
@@ -84,25 +136,6 @@ namespace DepTrailersApp.Controllers
             }
 
             return videoId;
-        }
-
-
-        // POST api/movies
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/movies/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/movies/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
