@@ -57,6 +57,7 @@ namespace DepTrailersApp.Controllers
         }
         // GET /api/movies/popular
         [HttpGet("popular/")]
+        [ResponseCache(Duration = 60)]
         public async Task<ActionResult<Movie>> getPopularMovies()
         {
 

@@ -20,7 +20,7 @@ export class NavbarComponent implements OnInit {
   constructor(private router: Router, private movieService: MovieService) { }
 
   ngOnInit() {
-
+    // Document this: Explain each func
     this.query.valueChanges
       .pipe(debounceTime(200),
         distinctUntilChanged(),
