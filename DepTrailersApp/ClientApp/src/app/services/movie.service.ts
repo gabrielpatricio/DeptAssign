@@ -20,11 +20,11 @@ export class MovieService {
 
   constructor(private http: HttpClient) {
     this.myAppUrl = environment.appUrl;
-    this.myApiUrl = 'api/movies/';
+    this.myApiUrl = 'api/v1.0/movies/';
   }
 
   /**
-   * Call -> GET api/movies/popular
+   * Call -> GET api/v1.0/movies/popular
    * */
   getPopularMovies(): Observable<Movie[]> {
     return this.http.get<Movie[]>(this.myAppUrl + this.myApiUrl+ 'popular/')
@@ -34,7 +34,7 @@ export class MovieService {
       );
   }
   /**
-   * Call -> GET api/movies/find?q={query}
+   * Call -> GET api/v1.0/movies/find?q={query}
    * @param query parameter which user searched 
    */
   getSearchResults(query: string): Observable<Movie[]> {
@@ -47,7 +47,7 @@ export class MovieService {
       );
   }
   /**
-   * Call -> GET api/movies/{id}
+   * Call -> GET api/v1.0/movies/{id}
    * @param id movie Id
    */
   getMovie(id: number): Observable<Movie> {

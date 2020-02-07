@@ -27,6 +27,12 @@ namespace DepTrailersApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddApiVersioning(o => {
+                o.ReportApiVersions = true;
+                o.AssumeDefaultVersionWhenUnspecified = true;
+                o.DefaultApiVersion = new ApiVersion(1,0);
+            });
             // Assign User Secrets values from Configuration to MovieConfig model
             services.Configure<MovieConfig>(Configuration.GetSection("Movies"));
 

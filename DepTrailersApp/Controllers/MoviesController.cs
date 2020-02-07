@@ -15,7 +15,9 @@ using Newtonsoft.Json;
 
 namespace DepTrailersApp.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{v:apiVersion}/[controller]")]
+    [ApiController]
     public class MoviesController : Controller
     {
 
@@ -65,7 +67,7 @@ namespace DepTrailersApp.Controllers
         /**
          * List popular movies to display in the homepage        
          * **/
-        // GET /api/movies/popular
+        // GET api/movies/popular
         [HttpGet("popular/")]
         public async Task<ActionResult<Movie>> getPopularMovies()
         {
@@ -92,7 +94,7 @@ namespace DepTrailersApp.Controllers
         /**
          * Get specific movie details
          * **/
-        // Get api/movies/{id}
+        // Get api/v1.0/movies/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Movie>> getMovie(int id)
         {
