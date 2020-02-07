@@ -22,7 +22,6 @@ namespace DepTrailersApp.Controllers
     {
 
         private readonly MovieConfig _movieConfig;
-        private readonly string TMDB_API_URL = "https://api.themoviedb.org/3/";
         private readonly HttpClient http = new HttpClient();
         
         public MoviesController(IOptions<MovieConfig> movieConfig)
@@ -42,14 +41,15 @@ namespace DepTrailersApp.Controllers
         [ResponseCache(Duration = 30, VaryByQueryKeys = new string[] { "q" })] 
         public async Task<ActionResult<Movie>> getSearchResults([FromQuery(Name = "q")]string query)
         {
-             var responseString="";
-
-            // Handling empty || null query Exception, sending empty result to client-side
+            var responseString = "";
+            
             try {  
             // Request TmDB Api movies matching query string
             responseString = await http.GetStringAsync(
-                new Uri($"{TMDB_API_URL}search/movie?api_key={_movieConfig.TmdbApiKey}&query={query}"));
+                new Uri($"{_movieConfig.TmdbApiUrl}/search/movie?api_key={_movieConfig.TmdbApiKey}&query={query}"));
             }
+            // Handling empty || null query Exception, sending empty result to client-side
+            // in order to allow the user to continue with the search even if all characters were deleted
             catch (HttpRequestException)
             {
                 return Ok();
@@ -59,8 +59,7 @@ namespace DepTrailersApp.Controllers
                 return BadRequest();
             }
 
-            var jsonString = JsonConvert.SerializeObject(buildMovieList(responseString));
-            
+            var jsonString = JsonConvert.SerializeObject(buildMovieList(responseString)); 
             return Ok(jsonString);
         }
         
@@ -73,20 +72,20 @@ namespace DepTrailersApp.Controllers
         {
             var responseString = "";
             // Request TmDB Api popular movies
-            try { 
-                 responseString = await http.GetStringAsync(
-                     new Uri($"{TMDB_API_URL}movie/popular?api_key={_movieConfig.TmdbApiKey}&language=en-US&page=1"));
+            try {
+                responseString = await http.GetStringAsync(
+                    new Uri($"{_movieConfig.TmdbApiUrl}/movie/popular?api_key={_movieConfig.TmdbApiKey}&language=en-US&page=1"));
             }
-            catch(Exception e)
+            catch (ArgumentNullException)
             {
-                if(e is ArgumentNullException || e is HttpRequestException)
-                {
-                    return BadRequest();
-                }
-
+                return BadRequest();
             }
+            catch(HttpRequestException)
+            {
+                return BadRequest();
+            }
+
             var jsonString = JsonConvert.SerializeObject(buildMovieList(responseString));
-            
             return Ok(jsonString);
         }
 
@@ -101,14 +100,18 @@ namespace DepTrailersApp.Controllers
             var responseString = "";
             try { 
                 responseString = await http.GetStringAsync(
-                    new Uri($"{TMDB_API_URL}movie/{id}?api_key={_movieConfig.TmdbApiKey}&language=en-US"));
+                    new Uri($"{_movieConfig.TmdbApiUrl}/movie/{id}?api_key={_movieConfig.TmdbApiKey}&language=en-US"));
             }
-            catch (Exception e)
+            catch (ArgumentNullException)
             {
-                if (e is ArgumentNullException || e is HttpRequestException) { return BadRequest(); }
+                return BadRequest();
             }
+            catch (HttpRequestException)
+            {
+                return BadRequest();
+            }
+
             dynamic body = JsonConvert.DeserializeObject(responseString);
-            
             // Build movie object with all the info
             Movie movie = new Movie
             {
@@ -123,7 +126,6 @@ namespace DepTrailersApp.Controllers
             };
 
             var jsonString = JsonConvert.SerializeObject(movie);
-            
             return Ok(jsonString);
         }
 
@@ -176,12 +178,12 @@ namespace DepTrailersApp.Controllers
             SearchResource.ListRequest listRequest = youtube.Search.List("snippet");
             listRequest.Q = search; // search term
             listRequest.Type = "video"; 
-            listRequest.MaxResults = 1; // I decided to keep the first result as the choosen one to associate with the movie
+            listRequest.MaxResults = 1; // I decided to keep the first result as the chosen one to associate with the movie
 
             SearchListResponse searchResponse = listRequest.Execute();
             
             // Handle possible occurrence of no results
-            if (searchResponse.Items.Count < 0)
+            if (searchResponse.Items.Count == 0)
             {
                 return "";
             }

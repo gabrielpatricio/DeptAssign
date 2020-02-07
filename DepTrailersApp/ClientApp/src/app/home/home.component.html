@@ -4,8 +4,7 @@
       <h1 class="jumbotron-heading">DepTrailers</h1>
       <p class="lead text-muted">Something short and leading about this amazing platform, the creator, etc.</p>
       <p>
-        <a href="#" class="btn btn-primary my-2">Request Trailer</a>
-        <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+        <!--   <button class="btn btn-lg btn-outline-primary" (click)="open(mymodal)">Ask for a Trailer!</button>-->
       </p>
     </div>
   </section>
@@ -22,7 +21,6 @@
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
                   <a [routerLink]="['/movie', movie.Id]"><button type="button" class="btn btn-sm btn-outline-secondary">More Info</button></a>
-
                 </div>
                 <h6 class="bold padding-bottom-7">Rating: {{movie.Rating}} <small>/ 10</small></h6>
               </div>
@@ -32,5 +30,34 @@
       </div>
     </div>
   </div>
-
 </main>
+
+
+
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Just a dummy form :(</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="nameInputContact">Your name</label>
+      <input type="text" class="form-control" id="nameInputContact" placeholder="">
+
+    </div>
+    <div class="form-group">
+      <label for="emailInputContact">Your email</label>
+      <input type="email" class="form-control" id="emailInputContact" placeholder="">
+    </div>
+    <div class="form-group">
+      <label for="movieInputContact">Movie Name</label>
+      <input type="text" class="form-control" id="movieInputContact" placeholder="">
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')">Send Request</button>
+  </div>
+</ng-template>
+

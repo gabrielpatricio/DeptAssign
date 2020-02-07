@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MovieService } from '../services/movie.service';
 import { Movie } from '../models/movie';
+import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -13,7 +14,7 @@ export class HomeComponent implements OnInit {
 
   popularMovies$: Observable<Movie[]>;
 
-  constructor(private movieService: MovieService) {
+  constructor(private movieService: MovieService, private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -26,6 +27,9 @@ export class HomeComponent implements OnInit {
   loadPopularMovies() {
     this.popularMovies$ = this.movieService.getPopularMovies();
     
+  }
+  open(content) {
+    this.modalService.open(content);
   }
 
 }

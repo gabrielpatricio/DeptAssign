@@ -4,7 +4,7 @@ import {MovieService} from '../services/movie.service';
 import { Movie } from '../models/movie';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 
 @Component({
@@ -16,9 +16,20 @@ export class NavbarComponent implements OnInit {
 
   query = new FormControl('');
   results$: Movie[] = [];
+  mySubscription: any;
 
-  constructor(private router: Router, private movieService: MovieService) { }
 
+  constructor(private route: ActivatedRoute, private router: Router, private movieService: MovieService) {
+    router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    };
+    this.mySubscription = router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        // Trick the Router into believing it's last link wasn't previously loaded
+        router.navigated = false;
+      }
+    });
+  }
   
   /**
    * Method called everytime input on search bar changes
@@ -41,6 +52,15 @@ export class NavbarComponent implements OnInit {
       });
     
   }
+  /**
+   * Workaround to reload the component
+   * if query string changes
+   * */
+  ngOnDestroy() {
+    if (this.mySubscription) {
+      this.mySubscription.unsubscribe();
+    }
+  }
   /*
    * Method called if button search is triggered,
    * query parameter is obtained from search bar input 
@@ -50,6 +70,14 @@ export class NavbarComponent implements OnInit {
         this.router.navigate(['/search'], { queryParams: { q: this.query.value } 
       });
     
+  }
+  gotoMovie(id) {
+    this.results$ = [];
+    this.router.navigate(['/movie/'+id]);
+  }
+  gotoHome() {
+    this.results$ = [];
+    this.router.navigate(['/']);
   }
 
 }

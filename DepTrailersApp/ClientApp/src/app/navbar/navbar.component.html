@@ -1,16 +1,17 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" [routerLink]="['/']">DepTrailers</a>
-    <input [formControl]="query" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" autofocus>
-    <button class="btn btn-outline-info my-2 my-sm-0" (click)="search()">Search</button>
+  <a class="navbar-brand" [routerLink]="" (click)="gotoHome()">DepTrailers</a>
+  <input [formControl]="query" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" autofocus>
+  <button class="btn btn-outline-info my-2 my-sm-0" (click)="search()">Search</button>
 </nav>
 <section class="filter-wrapper">
   <div class="keyword-wrapper">
-  <ul class="search-list">
-    <li *ngFor="let result of results$" class="filter-select-list">
-      <img src="http://image.tmdb.org/t/p/w185/{{result.Poster}}" alt="" width="50" height="50">
-      <a [routerLink]="['/movie', result.Id]">
-        {{result.Title}}
-      </a>
-</ul>
+    <ul class="search-list" style="list-style-type:none">
+      <li *ngFor="let result of results$" class="filter-select-list" style="margin:inherit">
+        <img src="http://image.tmdb.org/t/p/w185/{{result.Poster}}" alt="" width="70" height="100">
+        <a role="button" (click)="gotoMovie(result.Id)" style="cursor:pointer">
+          <b>{{result.Title}}</b>
+        </a>
+    </ul>
   </div>
 </section>
+<!--[routerLink]="['/movie', result.Id]"-->

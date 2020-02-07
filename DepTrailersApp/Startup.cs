@@ -27,7 +27,6 @@ namespace DepTrailersApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddApiVersioning(o => {
                 o.ReportApiVersions = true;
                 o.AssumeDefaultVersionWhenUnspecified = true;
@@ -41,7 +40,6 @@ namespace DepTrailersApp
             // Add the Response Caching Middleware
             services.AddResponseCaching();
 
-
             // The ideal policy 'same-origin' would prevent possible malicious connections
             // I used this custom CORS Policy as I decided to decouple
             // the frontend and backend and they had different scheme (http: and https:)
@@ -53,7 +51,6 @@ namespace DepTrailersApp
                     .AllowAnyMethod()
                     .AllowAnyHeader());
             });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,7 +60,6 @@ namespace DepTrailersApp
             {
                 app.UseDeveloperExceptionPage();
                 app.UseCors("CorsPolicy");
-
             }
 
             app.UseHttpsRedirection();
@@ -79,7 +75,8 @@ namespace DepTrailersApp
                     new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
                     {
                         Public = true,
-                        MaxAge = TimeSpan.FromSeconds(30)
+                        MaxAge = TimeSpan.FromSeconds(30),
+
                     };
                 context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
                     new string[] { "Accept-Encoding" };
@@ -88,7 +85,6 @@ namespace DepTrailersApp
             });
             
             app.UseRouting();
-            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

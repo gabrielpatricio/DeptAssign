@@ -13,5 +13,6 @@ namespace DepTrailersApp.Models.Configuration
     {
         public string TmdbApiKey { get; set; }
         public string YtApiKey { get; set; }
+        public string TmdbApiUrl { get; set; }
     }
 }
