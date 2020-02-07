@@ -4,8 +4,10 @@
 
 I used the Secret Manager tool to store sensitive data during the development. To run the application successfully you should use user-secrets running the command (in the project directory):
 
-`dotnet user-secrets init` 
-
+```
+cd DepTrailersApp/ 
+dotnet user-secrets init 
+```
 A secrets.json file will be created outside the working tree. Make sure you set the same keys name (although you can use your API keys as a value)
 ```
 dotnet user-secrets set "Movies:TmdbApiKey" "24ef18a9a2a6be1292a50289a8b49004"
@@ -19,13 +21,14 @@ Run the server to expose the API on https://localhost:5001:
 
 ```
 cd DepTrailersApp/ 
-donet clean && dotnet build && dotnet run
+dotnet clean && dotnet build && dotnet run
 ```
 
 Run the client server on http://localhost:4200:
 
 ```
 cd ClientApp/
+npm install
 ng serve
 ```
 
@@ -65,4 +68,5 @@ Alternatively, and probably a bit more safe solution would be explicitly specify
 ```
 Or even more ideal configuration would be the use of policy same-origin.
 
-
+### Versioning API
+For a matter of scalability and future use the current API endpoints were registered in its version 1.0
