@@ -4,8 +4,10 @@
 
 I used the Secret Manager tool to store sensitive data during the development. To run the application successfully you should use user-secrets running the command (in the project directory):
 
-`dotnet user-secrets init` 
-
+```
+cd DepTrailersApp/ 
+dotnet user-secrets init 
+```
 A secrets.json file will be created outside the working tree. Make sure you set the same keys name (although you can use your API keys as a value)
 ```
 dotnet user-secrets set "Movies:TmdbApiKey" "24ef18a9a2a6be1292a50289a8b49004"
