@@ -66,4 +66,4 @@ Alternatively, and probably a bit more safe solution would be explicitly specify
 Or even more ideal configuration would be the use of policy same-origin.
 
 ### Bonus Task (Contact Form)
-TODO: Actually I think I think didn't understand the goal of this task, it would be just to demonstrate a POST request to my API or I was supposed to configure a email service in asp .net core?
+TODO: Actually I think didn't understand the purpose of this task, it would be just to demonstrate a POST request to my API or I was supposed to configure a email service in asp .net core?
