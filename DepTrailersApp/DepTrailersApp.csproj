@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UserSecretsId>8f620e7e-fc6b-4357-bebe-78be66dd0e5e</UserSecretsId>
+    <ApplicationIcon />
+    <Win32Resource />
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Remove="ClientApp\src\app\models\movie.ts" />

@@ -19,8 +19,18 @@ export class NavbarComponent implements OnInit {
 
   constructor(private router: Router, private movieService: MovieService) { }
 
+  
+  /**
+   * Method called everytime input on search bar changes
+   *
+   * DebounceTime: Each time the input value changes, a request is performed
+   * when there haven’t been any other values for 200 ms.
+   *
+   * DistinctUntilChanged: Ignore serial duplicates
+   *
+   * Switchmap: Guarantees in-order results
+   * **/
   ngOnInit() {
-    // Document this: Explain each func
     this.query.valueChanges
       .pipe(debounceTime(200),
         distinctUntilChanged(),
@@ -29,9 +39,14 @@ export class NavbarComponent implements OnInit {
         if (result === []) { return; }
         else { this.results$ = result; }
       });
-  
+    
   }
+  /*
+   * Method called if button search is triggered,
+   * query parameter is obtained from search bar input 
+   * **/
   search() {
+        this.results$ = [];
         this.router.navigate(['/search'], { queryParams: { q: this.query.value } 
       });
     

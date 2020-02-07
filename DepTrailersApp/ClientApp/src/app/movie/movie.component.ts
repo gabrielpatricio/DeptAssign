@@ -26,13 +26,20 @@ export class MovieComponent implements OnInit {
   ngOnInit() {
     this.getInfo();
   }
+  /**
+   * Method retrieves info of specific movie, using MovieService to call API
+   * */
   getInfo() {
     this.movie$ = this.movieService.getMovie(this.movieId);
   }
-  getEmbedUrl(item) {
-    // Warning: exposes your application to XSS security risks! (dev use only)
-    // Possible fix: use of Pipes https://www.youtube.com/watch?v=nzyJ9imm29w&list=PLEsfXFp6DpzQThMU768hTZInWUqfoyTEW&index=10
-    return this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/'+ item.Trailer);
+  /**
+   * Auxiliar method to bypass Security (youtube iframe)
+   * 
+   * @param item: 
+   */
+  getEmbedUrl(movie) {
+    // Exposes your application to XSS security risks! (dev use only)
+    return this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/'+ movie.Trailer);
   }
 
 }

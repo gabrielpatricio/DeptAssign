@@ -23,6 +23,9 @@ export class MovieService {
     this.myApiUrl = 'api/movies/';
   }
 
+  /**
+   * Call -> GET api/movies/popular
+   * */
   getPopularMovies(): Observable<Movie[]> {
     return this.http.get<Movie[]>(this.myAppUrl + this.myApiUrl+ 'popular/')
       .pipe(
@@ -30,13 +33,11 @@ export class MovieService {
         catchError(this.errorHandler)
       );
   }
-
+  /**
+   * Call -> GET api/movies/find?q={query}
+   * @param query parameter which user searched 
+   */
   getSearchResults(query: string): Observable<Movie[]> {
-
-    //if options
-    /*const options = term ?
-      { params: new HttpParams().set('name', term) } : {};*/
-
     const searchparam = query ?
       { params: new HttpParams().set('q', query) } : {};
     return this.http.get<Movie[]>(this.myAppUrl + this.myApiUrl + 'find', searchparam)
@@ -45,6 +46,10 @@ export class MovieService {
         catchError(this.errorHandler)
       );
   }
+  /**
+   * Call -> GET api/movies/{id}
+   * @param id movie Id
+   */
   getMovie(id: number): Observable<Movie> {
     return this.http.get<Movie>(this.myAppUrl + this.myApiUrl + id)
       .pipe(
@@ -52,7 +57,10 @@ export class MovieService {
         catchError(this.errorHandler)
       );
   }
-
+  /**
+   * Handle error messages
+   * @param error error message received from server side
+   */
   errorHandler(error) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {

@@ -32,11 +32,18 @@ export class SearchResultsComponent implements OnInit {
     
   }
 
+  /**
+   * Workaround to reload the component
+   * if query string changes
+   * */
   ngOnDestroy() {
     if (this.mySubscription) {
       this.mySubscription.unsubscribe();
     }
   }
+  /**
+   *  Method populates array of movies, with the result from API call
+   * */
   loadSearchResults() {
     this.results$ = this.movieService.getSearchResults(this.route.snapshot.queryParamMap.get('q'));
   }

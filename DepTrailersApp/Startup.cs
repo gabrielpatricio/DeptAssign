@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DepTrailersApp.Models.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -25,8 +27,19 @@ namespace DepTrailersApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Assign User Secrets values from Configuration to MovieConfig model
+            services.Configure<MovieConfig>(Configuration.GetSection("Movies"));
+
             services.AddControllers();
 
+            // Add the Response Caching Middleware
+            services.AddResponseCaching();
+
+
+            // The ideal policy 'same-origin' would prevent possible malicious connections
+            // I used this custom CORS Policy as I decided to decouple
+            // the frontend and backend and they had different scheme (http: and https:)
+            // it was my workaround to avoid being blocked by CORS (just for development use)
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
@@ -34,7 +47,7 @@ namespace DepTrailersApp
                     .AllowAnyMethod()
                     .AllowAnyHeader());
             });
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,14 +56,33 @@ namespace DepTrailersApp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors("CorsPolicy");
+
             }
 
             app.UseHttpsRedirection();
+            // Enable response caching
+            app.UseResponseCaching();
 
+            // Response Caching Middleware only caches server responses that result in a 200(OK) status code. 
+            // Caches cacheable responses for up to 30 seconds.
+            // Serve a cached response only if the Accept-Encoding header of subsequent requests matches that of the original request.
+            app.Use(async (context, next) =>
+            {
+                context.Response.GetTypedHeaders().CacheControl =
+                    new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+                    {
+                        Public = true,
+                        MaxAge = TimeSpan.FromSeconds(30)
+                    };
+                context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
+                    new string[] { "Accept-Encoding" };
+
+                await next();
+            });
+            
             app.UseRouting();
             
-            //Check this
-            app.UseCors("CorsPolicy");
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

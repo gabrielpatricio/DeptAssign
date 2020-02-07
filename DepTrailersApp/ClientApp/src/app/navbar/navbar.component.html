@@ -5,7 +5,7 @@
 </nav>
 <section class="filter-wrapper">
   <div class="keyword-wrapper">
-  <ul class="filter-select">
+  <ul class="search-list">
     <li *ngFor="let result of results$" class="filter-select-list">
       <img src="http://image.tmdb.org/t/p/w185/{{result.Poster}}" alt="" width="50" height="50">
       <a [routerLink]="['/movie', result.Id]">

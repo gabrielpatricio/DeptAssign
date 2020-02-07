@@ -6,4 +6,5 @@ export class Movie {
   Rating: number;
   Release: string;
   Trailer: string;
+  Overview: string;
 }

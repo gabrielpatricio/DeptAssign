@@ -20,6 +20,9 @@ export class HomeComponent implements OnInit {
     this.loadPopularMovies();
   }
 
+  /**
+   * Method uses MovieService to call API and get popular movies
+   * **/
   loadPopularMovies() {
     this.popularMovies$ = this.movieService.getPopularMovies();
     

@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+// https://github.com/MurhafSousli/ngx-sharebuttons
 
 
 
@@ -28,6 +29,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     AppRoutingModule,
     AppRoutingModule,
     ReactiveFormsModule
+
   ],
   providers: [
     MovieService
