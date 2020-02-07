@@ -37,7 +37,21 @@ Fazer o pedido apenas quando queremos um filme em especifico
 ### Use of TmDB API
 
 ### Cors Policy
+Alternatevely, and probably a bit more safe solution I could explicitly specify origin url 
+```
+ services.AddCors(options =>
+    {
+        options.AddPolicy(MyAllowSpecificOrigins,
+        builder =>
+        {
+            builder.WithOrigins("http://example.com",
+                                "http://www.contoso.com")
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+        });
+    });
 
+```
 ### Smart Search (Autocomplete)
 
 ### Bonus Task (Contact Form)
