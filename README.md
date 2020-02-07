@@ -70,3 +70,17 @@ Or even more ideal configuration would be the use of policy same-origin.
 
 ### Versioning API
 For a matter of scalability and future use the current API endpoints were registered in its version 1.0
+
+#### Endpoints
+List movies matching with the string send as a parameter in the query
+```
+GET /api/v1.0/movies/find?q={query} 
+````
+List most popular movies
+```
+GET /api/v1.0/movies/popular
+```
+Get specific movie details by Id
+```
+GET api/v1.0/movies/{id}
+```
