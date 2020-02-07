@@ -26,6 +26,7 @@ Run the client server on http://localhost:4200:
 
 ```
 cd ClientApp/
+npm install
 ng serve
 ```
 
@@ -65,4 +66,5 @@ Alternatively, and probably a bit more safe solution would be explicitly specify
 ```
 Or even more ideal configuration would be the use of policy same-origin.
 
-
+### Versioning API
+For a matter of scalability and future use the current API endpoints were registered in its version 1.0
