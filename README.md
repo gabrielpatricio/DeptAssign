@@ -19,7 +19,7 @@ Run the server to expose the API on https://localhost:5001:
 
 ```
 cd DepTrailersApp/ 
-donet clean && dotnetbuild && dotnet run
+donet clean && dotnet build && dotnet run
 ```
 
 Run the client server on http://localhost:4200:
