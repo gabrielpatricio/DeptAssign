@@ -6,6 +6,7 @@ I used the Secret Manager tool to store sensitive data during the development. T
 
 ```
 cd DepTrailersApp/ 
+
 dotnet user-secrets init 
 ```
 A secrets.json file will be created outside the working tree. Make sure you set the same keys name (although you can use your API keys as a value)
@@ -19,8 +20,7 @@ dotnet user-secrets set "Movies:TmdbApiUrl" "https://api.themoviedb.org/3"
 
 Run the server to expose the API on https://localhost:5001:
 
-```
-cd DepTrailersApp/ 
+``` 
 dotnet clean && dotnet build && dotnet run
 ```
 
