@@ -11,11 +11,11 @@ dotnet user-secrets init
 ```
 A secrets.json file will be created outside the working tree. Make sure you set the same Key names (although, use your API keys as a value)
 ```
-dotnet user-secrets set "Movies:TmdbApiKey" "{YOUR_API_KEY}"
+dotnet user-secrets set "Movies:TmdbApiKey" "24ef18a9a2a6be1292a50289a8b49004"
 
-dotnet user-secrets set "Movies:YtApiKey" "{YOUR_API_KEY}"
+dotnet user-secrets set "Movies:YtApiKey" "AIzaSyCi3fLy92sRIlSNoh3lteI0IALE0dqOG2k"
 
-dotnet user-secrets set "Movies:TmdbApiUrl" "{YOUR_API_URL}"
+dotnet user-secrets set "Movies:TmdbApiUrl" "https://api.themoviedb.org/3"
 ```
 
 Run the server to expose the API on https://localhost:5001:
