@@ -42,17 +42,21 @@ namespace DepTrailersApp.Controllers
         public async Task<ActionResult<Movie>> getSearchResults([FromQuery(Name = "q")]string query)
         {
             var responseString = "";
-            
+
+            // Handling empty search string, sending empty result to client-side 
+            if (query == null)
+            {
+                return Ok();
+            }
             try {  
             // Request TmDB Api movies matching query string
             responseString = await http.GetStringAsync(
                 new Uri($"{_movieConfig.TmdbApiUrl}/search/movie?api_key={_movieConfig.TmdbApiKey}&query={query}"));
             }
-            // Handling empty || null query Exception, sending empty result to client-side
-            // in order to allow the user to continue with the search even if all characters were deleted
+            
             catch (HttpRequestException)
             {
-                return Ok();
+                return BadRequest();
             }
             catch (ArgumentNullException)
             {
@@ -167,9 +171,17 @@ namespace DepTrailersApp.Controllers
          * **/
         private string getTrailer(dynamic original_title, dynamic release_date)
         {
+            var search = "";
             // Creation of string to search for trailer on Youtube 
-            var search = original_title + " official trailer " + Convert.ToDateTime(release_date).Year;
-            
+            try
+            { 
+                search = original_title + " official trailer " + Convert.ToDateTime(release_date).Year;
+            }
+            catch (FormatException)
+            {
+                search = original_title + " official trailer ";
+            }
+
             YouTubeService youtube = new YouTubeService(new BaseClientService.Initializer()
             {
                 ApiKey = _movieConfig.YtApiKey
